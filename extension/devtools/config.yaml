@@ -1,0 +1,5 @@
+name: abcx3_dart_store_devtool
+version: 0.1.0
+materialIconCodePoint: '0xe8b0' # database icon-ish
+issueTracker: https://abcx3.com
+requiresConnection: true
