@@ -1,7 +1,8 @@
-name: abcx3_dart_store_devtool
+name: abcx3_store_devtool
 description: DevTools helper to inspect ABCx3 generated Dart stores (streams + snapshots)
 version: 0.1.0
 homepage: https://abcx3.com
+repository: https://github.com/FredrikBorgstrom/abcx3-dart-store-devtool
 
 environment:
   sdk: ^3.0.0

@@ -1,6 +1,9 @@
 # ABCx3 Dart Store DevTool
 
 A lightweight DevTools extension + in-app bridge to visualize all ABCx3 generated stores (`ModelStreamStore` descendants) as they change.
+You need to have these package installed on your backend: https://www.npmjs.com/package/@abcx3/prisma-generator-dart and https://www.npmjs.com/package/@abcx3/prisma-generator-nestjs . 
+So far, NestJS is supported as a backend framework, but more can come if interest is shown.
+
 
 ## What it does
 - Subscribes to each store’s `items$` stream in your app (via a tiny setup helper inside the app).
