@@ -43,7 +43,8 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
     _applyThemeOverride(ThemeOverride.dark);
 
     // If running inside DevTools, react to theme updates only when following host.
-    extensionManager.registerEventHandler(DevToolsExtensionEventType.themeUpdate, (_) {
+    extensionManager
+        .registerEventHandler(DevToolsExtensionEventType.themeUpdate, (_) {
       if (_themeOverride == ThemeOverride.followHost) {
         // Do nothing: DevToolsExtension already updated extensionManager.darkThemeEnabled.
         setState(() {});
@@ -99,7 +100,9 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.deepPurple,
-        brightness: extensionManager.darkThemeEnabled.value ? Brightness.dark : Brightness.light,
+        brightness: extensionManager.darkThemeEnabled.value
+            ? Brightness.dark
+            : Brightness.light,
       ),
       home: Scaffold(
         appBar: AppBar(
@@ -120,10 +123,12 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
                   final selected = name == _selected;
                   return ListTile(
                     selected: selected,
-                    title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    title: Text(name,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
                     trailing: CircleAvatar(
                       radius: 12,
-                      child: Text('$count', style: const TextStyle(fontSize: 12)),
+                      child:
+                          Text('$count', style: const TextStyle(fontSize: 12)),
                     ),
                     onTap: () => setState(() => _selected = name),
                   );
@@ -182,7 +187,9 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
 
   Widget _buildContent() {
     final sel = _selected;
-    final rows = sel == null ? const <Map<String, dynamic>>[] : (_storeData[sel] ?? const []);
+    final rows = sel == null
+        ? const <Map<String, dynamic>>[]
+        : (_storeData[sel] ?? const []);
     if (sel == null) {
       return const Center(child: Text('Select a store on the left'));
     }
@@ -193,11 +200,13 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
     final filtered = _applyFilter(rows, _searchCtrl.text);
     final sorted = _applySort(filtered, _sortKey, asc: _sortAsc);
     final keys = _availableSortKeys(rows);
-    _sortKey ??= keys.contains('id') ? 'id' : (keys.isNotEmpty ? keys.first : null);
+    _sortKey ??=
+        keys.contains('id') ? 'id' : (keys.isNotEmpty ? keys.first : null);
 
     return Column(
       children: [
-        _controlsBar(sel, total: rows.length, visible: sorted.length, keys: keys),
+        _controlsBar(sel,
+            total: rows.length, visible: sorted.length, keys: keys),
         const Divider(height: 1),
         Expanded(
           child: ListView.separated(
@@ -206,7 +215,8 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
             itemCount: sorted.length,
             itemBuilder: (context, idx) {
               return _StoreItemTile(
-                key: ValueKey('item-${sel}-${idx}-${_expandAllItems ? 'exp' : 'col'}'),
+                key: ValueKey(
+                    'item-$sel-$idx-${_expandAllItems ? 'exp' : 'col'}'),
                 map: sorted[idx],
                 globalExpandAll: _expandAllItems,
                 itemIndex: idx,
@@ -223,7 +233,7 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-      color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
       child: Row(
         children: [
           // Search
@@ -263,10 +273,13 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
           const SizedBox(width: 12),
           // Expand/collapse all items
           Tooltip(
-            message: _expandAllItems ? 'Collapse all items' : 'Expand all items',
+            message:
+                _expandAllItems ? 'Collapse all items' : 'Expand all items',
             child: IconButton(
-              icon: Icon(_expandAllItems ? Icons.unfold_less : Icons.unfold_more),
-              onPressed: () => setState(() => _expandAllItems = !_expandAllItems),
+              icon:
+                  Icon(_expandAllItems ? Icons.unfold_less : Icons.unfold_more),
+              onPressed: () =>
+                  setState(() => _expandAllItems = !_expandAllItems),
             ),
           ),
           const SizedBox(width: 8),
@@ -285,10 +298,16 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
                 final pretty = const JsonEncoder.withIndent('  ').convert(
                   visible == total
                       ? (_storeData[storeName] ?? const [])
-                      : _applySort(_applyFilter(_storeData[storeName] ?? const [], _searchCtrl.text), _sortKey, asc: _sortAsc),
+                      : _applySort(
+                          _applyFilter(_storeData[storeName] ?? const [],
+                              _searchCtrl.text),
+                          _sortKey,
+                          asc: _sortAsc,
+                        ),
                 );
                 extensionManager.copyToClipboard(pretty);
-                extensionManager.showNotification('Copied $visible item(s) from $storeName');
+                extensionManager.showNotification(
+                    'Copied $visible item(s) from $storeName');
               },
             ),
           ),
@@ -368,7 +387,8 @@ class _StoresExtensionAppState extends State<_StoresExtensionApp> {
   }
 
   // Global primitive check usable from this state object
-  bool _isPrimitiveGlobal(dynamic v) => v == null || v is num || v is String || v is bool;
+  bool _isPrimitiveGlobal(dynamic v) =>
+      v == null || v is num || v is String || v is bool;
 }
 
 enum ThemeOverride { followHost, light, dark }
@@ -378,7 +398,11 @@ class _StoreItemTile extends StatefulWidget {
   final Map<String, dynamic> map;
   final bool globalExpandAll;
   final int itemIndex;
-  const _StoreItemTile({super.key, required this.map, required this.globalExpandAll, required this.itemIndex});
+  const _StoreItemTile(
+      {super.key,
+      required this.map,
+      required this.globalExpandAll,
+      required this.itemIndex});
 
   @override
   State<_StoreItemTile> createState() => _StoreItemTileState();
@@ -411,8 +435,8 @@ class _StoreItemTileState extends State<_StoreItemTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final surface = theme.colorScheme.surface;
-    final onSurface = theme.colorScheme.onSurface.withOpacity(0.9);
-    final shadow = theme.colorScheme.shadow.withOpacity(0.08);
+    final onSurface = theme.colorScheme.onSurface.withValues(alpha: 0.9);
+    final shadow = theme.colorScheme.shadow.withValues(alpha: 0.08);
 
     final summary = _buildSummary(widget.map);
     final summaryKeys = summary.map((e) => e.key).toSet();
@@ -425,7 +449,7 @@ class _StoreItemTileState extends State<_StoreItemTile> {
         boxShadow: [
           BoxShadow(color: shadow, blurRadius: 10, offset: const Offset(0, 4)),
         ],
-        border: Border.all(color: theme.dividerColor.withOpacity(0.2)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.2)),
       ),
       child: ExpansionTile(
         onExpansionChanged: (v) => setState(() {
@@ -444,7 +468,11 @@ class _StoreItemTileState extends State<_StoreItemTile> {
           runSpacing: 6,
           children: summary.isNotEmpty
               ? summary.map((e) => _chip(context, e.key, e.value)).toList()
-              : [Text('{…}', style: theme.textTheme.bodyMedium?.copyWith(color: onSurface))],
+              : [
+                  Text('{…}',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: onSurface))
+                ],
         ),
         children: [
           Align(
@@ -453,12 +481,15 @@ class _StoreItemTileState extends State<_StoreItemTile> {
               spacing: 8,
               children: [
                 TextButton.icon(
-                  icon: Icon(_expandAll ? Icons.unfold_less : Icons.unfold_more, size: 18),
+                  icon: Icon(_expandAll ? Icons.unfold_less : Icons.unfold_more,
+                      size: 18),
                   label: Text(_expandAll ? 'Collapse all' : 'Expand all'),
                   onPressed: () => setState(() => _expandAll = !_expandAll),
                 ),
                 TextButton.icon(
-                  icon: Icon(_showJson ? Icons.visibility_off : Icons.visibility, size: 18),
+                  icon: Icon(
+                      _showJson ? Icons.visibility_off : Icons.visibility,
+                      size: 18),
                   label: Text(_showJson ? 'Hide JSON' : 'Show JSON'),
                   onPressed: () => setState(() => _showJson = !_showJson),
                 ),
@@ -466,7 +497,8 @@ class _StoreItemTileState extends State<_StoreItemTile> {
                   icon: const Icon(Icons.content_copy, size: 18),
                   label: const Text('Copy JSON'),
                   onPressed: () {
-                    final pretty = const JsonEncoder.withIndent('  ').convert(widget.map);
+                    final pretty =
+                        const JsonEncoder.withIndent('  ').convert(widget.map);
                     extensionManager.copyToClipboard(pretty);
                     extensionManager.showNotification('Copied item JSON');
                   },
@@ -480,12 +512,14 @@ class _StoreItemTileState extends State<_StoreItemTile> {
             map: widget.map,
             expandAll: _expandAll,
             excludeKeys: summaryKeys,
-            key: ValueKey('root-map-${widget.itemIndex}-${_expandAll ? 'exp' : 'col'}'),
+            key: ValueKey(
+                'root-map-${widget.itemIndex}-${_expandAll ? 'exp' : 'col'}'),
           ),
           if (_showJson) ...[
             const SizedBox(height: 8),
             _JsonTile(
-              key: ValueKey('json-${widget.itemIndex}-${_expandAll ? 'exp' : 'col'}-${_showJson ? 'show' : 'hide'}'),
+              key: ValueKey(
+                  'json-${widget.itemIndex}-${_expandAll ? 'exp' : 'col'}-${_showJson ? 'show' : 'hide'}'),
               data: widget.map,
               expandAll: _expandAll,
             ),
@@ -498,8 +532,18 @@ class _StoreItemTileState extends State<_StoreItemTile> {
   Iterable<MapEntry<String, String>> _buildSummary(Map<String, dynamic> m) {
     // Prefer common keys if present; otherwise take first 4 primitive fields.
     const preferred = [
-      'id', 'name', 'title', 'letter', 'userId', 'gameId', 'bagId',
-      'points', 'email', 'providerName', 'createdAt', 'updatedAt'
+      'id',
+      'name',
+      'title',
+      'letter',
+      'userId',
+      'gameId',
+      'bagId',
+      'points',
+      'email',
+      'providerName',
+      'createdAt',
+      'updatedAt'
     ];
 
     Map<String, String> picked = {};
@@ -521,7 +565,8 @@ class _StoreItemTileState extends State<_StoreItemTile> {
     return picked.entries;
   }
 
-  bool _isPrimitive(dynamic v) => v == null || v is num || v is String || v is bool;
+  bool _isPrimitive(dynamic v) =>
+      v == null || v is num || v is String || v is bool;
 
   String _fmt(dynamic v) {
     if (v == null) return 'null';
@@ -539,7 +584,8 @@ class _StoreItemTileState extends State<_StoreItemTile> {
           children: [
             TextSpan(
               text: '$key: ',
-              style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(fontWeight: FontWeight.w600),
             ),
             TextSpan(
               text: value,
@@ -557,7 +603,8 @@ class _JsonTile extends StatelessWidget {
   final dynamic data;
   final String? label;
   final bool expandAll;
-  const _JsonTile({super.key, required this.data, this.label, this.expandAll = false});
+  const _JsonTile(
+      {super.key, required this.data, this.label, this.expandAll = false});
 
   @override
   Widget build(BuildContext context) {
@@ -571,7 +618,8 @@ class _JsonTile extends StatelessWidget {
         children: entries
             .map((e) => Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: _JsonTile(data: e.value, label: e.key, expandAll: expandAll),
+                  child: _JsonTile(
+                      data: e.value, label: e.key, expandAll: expandAll),
                 ))
             .toList(),
       );
@@ -584,7 +632,8 @@ class _JsonTile extends StatelessWidget {
           for (int i = 0; i < list.length; i++)
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
-              child: _JsonTile(data: list[i], label: '[$i]', expandAll: expandAll),
+              child:
+                  _JsonTile(data: list[i], label: '[$i]', expandAll: expandAll),
             )
         ],
       );
@@ -650,14 +699,15 @@ class _MapPillView extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 6.0),
             child: ExpansionTile(
-              key: ValueKey('map-node-${expandAll}-${e.key}'),
+              key: ValueKey('map-node-$expandAll-${e.key}'),
               initiallyExpanded: expandAll,
               leading: const Icon(Icons.chevron_right),
               title: Text(
                 e.key,
                 style: theme.textTheme.titleSmall,
               ),
-              childrenPadding: const EdgeInsets.only(left: 12, right: 4, bottom: 8),
+              childrenPadding:
+                  const EdgeInsets.only(left: 12, right: 4, bottom: 8),
               children: [
                 if (e.value is Map)
                   _MapPillView(
@@ -681,7 +731,8 @@ class _MapPillView extends StatelessWidget {
     );
   }
 
-  bool _isPrimitiveAny(dynamic v) => v == null || v is num || v is String || v is bool;
+  bool _isPrimitiveAny(dynamic v) =>
+      v == null || v is num || v is String || v is bool;
 
   String _fmt(dynamic v) {
     if (v == null) return 'null';
@@ -698,7 +749,8 @@ class _MapPillView extends StatelessWidget {
           children: [
             TextSpan(
               text: '$key: ',
-              style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: theme.textTheme.labelMedium
+                  ?.copyWith(fontWeight: FontWeight.w600),
             ),
             TextSpan(
               text: value,
@@ -714,7 +766,7 @@ class _MapPillView extends StatelessWidget {
 class _ListPillView extends StatelessWidget {
   final List list;
   final bool expandAll;
-  const _ListPillView({super.key, required this.list, required this.expandAll});
+  const _ListPillView({required this.list, required this.expandAll});
 
   @override
   Widget build(BuildContext context) {
@@ -741,36 +793,38 @@ class _ListPillView extends StatelessWidget {
               spacing: 8,
               runSpacing: 6,
               children: [
-                for (final e in prim.entries)
+                for (final entry in prim.entries)
                   Chip(
-                    label: Text('[${e.key}]: ${_fmt(e.value)}', style: theme.textTheme.labelMedium),
+                    label: Text('[${entry.key}]: ${_fmt(entry.value)}',
+                        style: theme.textTheme.labelMedium),
                   ),
               ],
             ),
           ),
-        for (final e in obj.entries)
+        for (final entry in obj.entries)
           Padding(
             padding: const EdgeInsets.only(top: 6.0),
             child: ExpansionTile(
-              key: ValueKey('list-node-${expandAll}-${e.key}'),
+              key: ValueKey('list-node-$expandAll-${entry.key}'),
               initiallyExpanded: expandAll,
-              title: Text('[${e.key}]', style: theme.textTheme.titleSmall),
-              childrenPadding: const EdgeInsets.only(left: 12, right: 4, bottom: 8),
+              title: Text('[${entry.key}]', style: theme.textTheme.titleSmall),
+              childrenPadding:
+                  const EdgeInsets.only(left: 12, right: 4, bottom: 8),
               children: [
-                if (e.value is Map)
+                if (entry.value is Map)
                   _MapPillView(
-                    map: Map<String, dynamic>.from(e.value as Map),
+                    map: Map<String, dynamic>.from(entry.value as Map),
                     expandAll: expandAll,
                   )
-                else if (e.value is List)
+                else if (entry.value is List)
                   _ListPillView(
-                    list: e.value as List,
+                    list: entry.value as List,
                     expandAll: expandAll,
                   )
                 else
                   ListTile(
                     dense: true,
-                    title: Text(_fmt(e.value)),
+                    title: Text(_fmt(entry.value)),
                   ),
               ],
             ),
