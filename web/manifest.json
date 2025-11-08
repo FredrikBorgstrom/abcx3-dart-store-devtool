@@ -1,6 +1,6 @@
 {
-    "name": "abcx3_dart_store_devtool",
-    "short_name": "abcx3_dart_store_devtool",
+    "name": "abcx3_store_devtool",
+    "short_name": "abcx3_store_devtool",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

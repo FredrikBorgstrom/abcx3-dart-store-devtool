@@ -18,11 +18,10 @@ In your Flutter app:
 ```
 devtools:
   extensions:
-    - abcx3_dart_store_devtool
+    - abcx3_store_devtool
 
 dependencies:
-  abcx3_dart_store_devtool:
-    path: ../abcx3_dart_store_devtool/
+  abcx3_store_devtool: 0.1.1
 ```
 
 - Call the setup function in debug builds (already wired in `lib/main.dart`):

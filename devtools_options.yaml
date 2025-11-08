@@ -1,4 +1,4 @@
 description: This file stores settings for Dart & Flutter DevTools.
 documentation: https://docs.flutter.dev/tools/devtools/extensions#configure-extension-enablement-states
 extensions:
-  - abcx3_dart_store_devtool: true
+  - abcx3_store_devtool: true
